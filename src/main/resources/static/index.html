@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Insurance</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css"
+	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.js" defer></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js" defer></script>
+<script type="text/javascript" src="https://rawgit.com/marioizquierdo/jquery.serializeJSON/master/jquery.serializejson.min.js" defer></script>
+<script type="text/javascript" src="js/EventEmitter.js" defer></script>
+<script type="text/javascript" src="js/Model.js" defer></script>
+<script type="text/javascript" src="js/View.js" defer></script>
+<script type="text/javascript" src="js/Controller.js" defer></script>
+<script type="text/javascript" src="js/Core.js" defer></script>
+</head>
+<body>
+	<div class="container">
+	
+		<div class="flex-grid">
+			<section id="main">
+				<div><input type="button" value="Создать договор" id="create-document-button"> <input type="button" value="Открыть договор" id="open-document-button"></div>
+			
+				<div><table id="documents-list"></table></div>
+			</section>
+		</div>
+
+
+		<div id="document-dialog">
+			<form id="InsurantDocument" class="InsurantDocument">
+				<fieldset>
+					<legend>Работа со временем</legend>
+					<div><label>Страховая сумма <input type="text" id="InsurantDocument-insurance" name="insurance"/></label> <label>Срок	действия с <input type="date" id="InsurantDocument-startDate" name="startDate"/></label> <label>по <input type="date" id="InsurantDocument-endDate" name="endDate"/></label></div>
+					<div><label>Тип недвижимости <select id="InsurantDocument-Realty-realtyType" name="realty[realtyType][name]"></select></label>
+					</div>
+					<div><label>Год постройки <input type="text" id="InsurantDocument-Realty-constructionYear" name="realty[constructionYear]"/></label></div>
+					<div><label>Площадь, кв.м. <input type="text" id="InsurantDocument-Realty-area" name="realty[area]"/></label></div>
+					<div><input type="button" value="Рассчитать" id="calculate-insurance-premium-button" /></div>
+					<div><label>Дата расчета <input type="date" id="InsurantDocument-settlementDate" name="settlementDate"/></label><label>Премия <input type="text" id="InsurantDocument-premium" name="premium"/></label></div>
+				</fieldset>
+				
+				<div><label>№ договора<input type="text" id="InsurantDocument-documentNumber" name="documentNumber"/></label> <label>Дата заключения <input type="date" id="InsurantDocument-conclusionDate" name="conclusionDate"/></label></div>
+				<div>Страхователь</div>
+				<div><input type="button" value="Выбрать" id="customer-select-button" /> <label>ФИО<input type="text" id="InsurantDocument-Customer-lastName-firstName-middleName" /></label> <input type="button" value="Изменить" id="customer-button" /></div>
+				<div><label>Дата рождения <input type="date" id="InsurantDocument-Customer-birthdate" /></label> Паспорт <label>Серия <input type="text" id="InsurantDocument-Customer-passportSeries"/></label> <label>№ <input type="text" id="InsurantDocument-Customer-passportId"/></label></div>
+				
+				<div>Адрес недвижимости</div>
+				<div>
+					<label>государство <select id="InsurantDocument-Realty-Country" name="realty[address][country][id]"></select></label>
+					<label>индекс <input type="text" id="InsurantDocument-Realty-Address-postcode" name="realty[address][postcode]"/></label>
+					<label>республика, край, область <input type="text" id="InsurantDocument-Realty-Address-region" name="realty[address][region]"/></label>
+					<label>район <input type="text" id="InsurantDocument-Realty-Address-district" name="realty[address][district]"/></label>
+				</div>
+				<div>
+					<label>населенный пункт <input type="text" id="InsurantDocument-Realty-Address-city" name="realty[address][city]"/></label>
+					<label>улица <input type="text" id="InsurantDocument-Realty-Address-street" name="realty[address][street]"/></label>
+					<label>дом <input type="text" id="InsurantDocument-Realty-Address-house" name="realty[address][house]"/></label>
+					<label>корпус <input type="text" id="InsurantDocument-Realty-Address-housing" name="realty[address][housing]"/></label>
+					<label>строение <input type="text" id="InsurantDocument-Realty-Address-building" name="realty[address][building]"/></label>
+					<label>квартира <input type="text" id="InsurantDocument-Realty-Address-flat" name="realty[address][flat]"/></label>
+				</div>
+			</form>
+		</div>
+		
+		
+		<div id="customer-choice-dialog" title="Выбор клиентов">
+			<form id="choice-Customer" class="Customer">
+				<div>ФИО <label>фамилия <input type="text" id="choice-Customer-lastName"/></label> <label>имя <input type="text" id="choice-Customer-firstName"/></label> <label>отчество <input type="text" id="choice-Customer-middleName"/></label></div>
+				<table><tr><th>ФИО</th> <th>Дата рождения</th> <th>Паспортные данные</th></tr></table>
+				<div>Нет подходящих записей</div>
+			</form>
+		</div>
+		
+		<div id="new-customer-dialog" title="Новый клиент">
+			<form id="new-Customer" class="Customer">
+				<div>ФИО <label>фамилия <input type="text" id="new-Customer-lastName"/></label> <label>имя <input type="text" id="new-Customer-firstName"/></label> <label>отчество <input type="text" id="new-Customer-middleName"/></label></div>
+				<div><label>Дата рождения <input type="date" id="new-Customer-birthdate"/></label></div>
+			</form>
+		</div>
+		
+		<div id="customer-dialog" title="Клиент">
+			<form id="Customer" class="Customer">
+				<div>ФИО <label>фамилия <input type="text" id="Customer-lastName" name="lastName"/></label> <label>имя <input type="text" id="Customer-firstName" name="firstName"/></label> <label>отчество <input type="text" id="Customer-middleName" name="middleName"/></label></div>
+				<div><label>Дата рождения <input type="date" id="Customer-birthdate" name="birthdate"/></label></div>
+				<div>Паспорт <label>Серия <input type="text" id="Customer-passportSeries" name="passportSeries"/></label> <label>№ <input type="text" id="Customer-passportId" name="passportId"/></label></div>
+			</form>
+		</div>
+		
+	</div>
+</body>
+</html>
